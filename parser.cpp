@@ -454,20 +454,24 @@ Tree parser::parse_procedure_identifier(){
 
 
 void parser::print_tree() {
-	unsigned int num = 0;
-	rec_print_tree(tree,num,'+');
+	num_of_tabs =0;
+	fill_symbol = '|';
+	rec_print_tree(tree);
 }
 
 
-void rec_print_tree(Tree curr, unsigned int num, char fill_symbol) {
-	cout << string(num, fill_symbol)<< curr.getValue() << endl;
+void parser::rec_print_tree(Tree curr) {
+	cout << string(num_of_tabs, fill_symbol)<< curr.getValue() << endl;
+	num_of_tabs++;
 		if (curr.getChildren().empty()) {
-
+			num_of_tabs--;
 			return;
 		}
 		for (auto it = 0; it < curr.getChildren().size(); ++it) {
-			rec_print_tree(curr.getChildren()[it],++num,fill_symbol);
+			rec_print_tree(curr.getChildren()[it]);
 		}	
+		num_of_tabs--;
+		return;
 }
 
 
