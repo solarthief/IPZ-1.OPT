@@ -10,11 +10,9 @@ void parser::pars(string file_path){
 	if (!errors.empty()) {
 		throw(1);
 	}
-	else {
-		 
+	else {		 
 		tree.setValue("<SIGNAL-PROGRAM>");
-		tree.addChild(parse_program());
-		 
+		tree.addChild(parse_program());		 
 	}
 }
 
@@ -29,7 +27,7 @@ Tree parser::parse_program(){
 		 
 		curr.setValue("<PROGRAM>");
 		 
-		curr.addChild(Tree(to_string(lexems[ct].code)));
+		 curr.addChild(parse_lex_by_code());
 		ct++;
 		curr.addChild(parse_procedure_identifier());
 		if (ct > max_ct || lexems[ct].code != 59) {
@@ -38,7 +36,7 @@ Tree parser::parse_program(){
 		}
 		else {
 			 
-			curr.addChild(Tree(to_string(lexems[ct].code)));
+			 curr.addChild(parse_lex_by_code());
 			ct++;
 			curr.addChild(parse_block());
 			if (ct > max_ct || lexems[ct].code != '.') {
@@ -47,7 +45,7 @@ Tree parser::parse_program(){
 			}
 			else {
 				 
-				curr.addChild(Tree(to_string(lexems[ct].code)));
+				 curr.addChild(parse_lex_by_code());
 			}
 		}
 	}
@@ -69,7 +67,7 @@ Tree parser::parse_block(){
 	}
 	else {
 		 
-		curr.addChild(Tree(to_string(lexems[ct].code)));
+		 curr.addChild(parse_lex_by_code());
 		ct++;
 		curr.addChild(parse_statements_list());
 		if (ct > max_ct || lexems[ct].code != 403) {
@@ -78,10 +76,10 @@ Tree parser::parse_block(){
 		}
 		else {
 			 
-			curr.addChild(Tree(to_string(lexems[ct].code)));
+			 curr.addChild(parse_lex_by_code());
 			ct++;
-			if (ct > max_ct || lexems[ct].code != '.') {
-				push_errors("Dot expected", lexems[ct].row_pos, lexems[ct].pos);
+			if (ct >= max_ct || lexems[ct].code != '.') {
+				push_errors("Dot expected", lexems[--ct].row_pos, lexems[--ct].pos);
 				throw(1);
 			}
 			
@@ -109,7 +107,7 @@ Tree parser::parse_variable_declarations(){
 		}
 		else {
 			 
-			curr.addChild(Tree(to_string(lexems[ct].code)));
+			 curr.addChild(parse_lex_by_code());
 			ct++;
 			curr.addChild(parse_declarations_list());
 		}
@@ -143,63 +141,94 @@ Tree parser::parse_declaration(){
 	Tree curr;
 	 
 	curr.setValue("<DECLARATION>");
-	curr.addChild(parse_variable_identifier());
-	if (ct > max_ct || lexems[ct].code != ':') {
-		push_errors("Colon expected", lexems[ct].row_pos, lexems[ct].pos);
-		throw(1);
-	}
-	else {
-		 
-		curr.addChild(Tree(to_string(lexems[ct].code)));
+	if (lexems[ct].code == 409) {
+		 curr.addChild(parse_lex_by_code());
 		ct++;
-		curr.addChild(parse_attribute());
-		curr.addChild(parse_attributes_list());
+		curr.addChild(parse_label());
+		curr.addChild(parse_label_list());
 		if (ct > max_ct || lexems[ct].code != ';') {
 			push_errors("Semicolon keyword expected", lexems[ct].row_pos, lexems[ct].pos);
 			throw(1);
 		}
 		else {
-			 
-			curr.addChild(Tree(to_string(lexems[ct].code)));
-			ct++;			
+
+			 curr.addChild(parse_lex_by_code());
+			ct++;
 		}
-	}    
-	 
+	}
+	else {
+		curr.addChild(parse_variable_identifier());
+		if (ct > max_ct || lexems[ct].code != ':') {
+			push_errors("Colon expected", lexems[ct].row_pos, lexems[ct].pos);
+			throw(1);
+		}
+		else {
+
+			 curr.addChild(parse_lex_by_code());
+			ct++;
+			curr.addChild(parse_attribute());
+			curr.addChild(parse_attributes_list());
+			if (ct > max_ct || lexems[ct].code != ';') {
+				push_errors("Semicolon keyword expected", lexems[ct].row_pos, lexems[ct].pos);
+				throw(1);
+			}
+			else {
+
+				 curr.addChild(parse_lex_by_code());
+				ct++;
+			}
+		}
+	}
 	 
 	return curr;
 }
 
-
-Tree parser::parse_attributes_list(){
-	 
+Tree parser::parse_label() {
 	Tree curr;
-	 
-	curr.setValue("<ATTRIBUTES-LIST>");
-	if (lexems[ct].code == ';') {
-		 
+	curr.setValue("<LABEL>");
+	if (lexems[ct].code >500 && lexems[ct].code <1000) {
+		 curr.addChild(parse_lex_by_code());
+		ct++;
+	}
+	return curr;
+}
+
+Tree parser::parse_label_list() {
+	Tree curr;
+	curr.setValue("<LABEL-LIST>");
+	if (ct > max_ct || lexems[ct].code == ';') {
+		return curr;
+	}
+	if (lexems[ct].code == ',') {
+		 curr.addChild(parse_lex_by_code());
+		ct++;
+		curr.addChild(parse_label());
+		curr.addChild(parse_label_list());
+	}	
+	return curr;
+}
+
+Tree parser::parse_attributes_list(){	 
+	Tree curr;
+	 curr.setValue("<ATTRIBUTES-LIST>");
+	if (lexems[ct].code == ';') {		 
 		return curr;		
 	}
 	else {
 		curr.addChild(parse_attribute());
 		curr.addChild(parse_attributes_list());
 	}   
-	 
-	 
 	return curr;
 }
 
 
 Tree parser::parse_attribute(){
 	 
-	Tree curr;
-	 
-	curr.setValue("<ATTRIBUTES>");
-	 
-	if (lexems[ct].code == 405 || lexems[ct].code == 406) {
-		 
-		curr.addChild(Tree(to_string(lexems[ct].code)));
-		ct++;
-		 
+	Tree curr;	 
+	curr.setValue("<ATTRIBUTES>");	 
+	if (lexems[ct].code == 405 || lexems[ct].code == 406) {		 
+		 curr.addChild(parse_lex_by_code());
+		ct++;		 
 		return curr;
 	}
 	else {
@@ -209,7 +238,7 @@ Tree parser::parse_attribute(){
 		}
 		else {
 			 
-			curr.addChild(Tree(to_string(lexems[ct].code)));
+			 curr.addChild(parse_lex_by_code());
 			ct++;
 			curr.addChild(parse_range());
 			if (ct > max_ct || lexems[ct].code != ']') {
@@ -218,13 +247,11 @@ Tree parser::parse_attribute(){
 			}
 			else {
 				 
-				curr.addChild(Tree(to_string(lexems[ct].code)));
+				 curr.addChild(parse_lex_by_code());
 				ct++;
 			}
 		}
-	}
-	 
-	 
+	}	 
 	return curr;
 }
 
@@ -240,7 +267,7 @@ Tree parser::parse_range(){
 	}
 	else {
 		 
-		curr.addChild(Tree(to_string(lexems[ct].code)));
+		 curr.addChild(parse_lex_by_code());
 		ct++;
 		if (ct > max_ct || lexems[ct].code != 302) {
 			push_errors(".. expected", lexems[ct].row_pos, lexems[ct].pos);
@@ -248,7 +275,7 @@ Tree parser::parse_range(){
 		}
 		else {
 			 
-			curr.addChild(Tree(to_string(lexems[ct].code)));
+			 curr.addChild(parse_lex_by_code());
 			ct++;
 			if (ct > max_ct || lexems[ct].code <500 || lexems[ct].code >1000) {
 				push_errors("Numeric constant expected", lexems[ct].row_pos, lexems[ct].pos);
@@ -256,7 +283,7 @@ Tree parser::parse_range(){
 			}
 			else {
 				 
-				curr.addChild(Tree(to_string(lexems[ct].code)));
+				 curr.addChild(parse_lex_by_code());
 				ct++;
 			}
 		}
@@ -290,7 +317,7 @@ Tree parser::parse_statement(){
 	curr.setValue("<STATEMENT>");
 	if (lexems[ct].code == 407) {
 		 
-		curr.addChild(Tree(to_string(lexems[ct].code)));
+		 curr.addChild(parse_lex_by_code());
 		ct++;
 		curr.addChild(parse_statements_list());		
 		if (ct > max_ct || lexems[ct].code != 408) {
@@ -299,7 +326,7 @@ Tree parser::parse_statement(){
 		}
 		else {
 			 
-			curr.addChild(Tree(to_string(lexems[ct].code)));
+			 curr.addChild(parse_lex_by_code());
 			ct++;			
 			if (ct > max_ct || lexems[ct].code != ';') {
 				push_errors("Semicolon expected", lexems[ct].row_pos, lexems[ct].pos);
@@ -307,7 +334,7 @@ Tree parser::parse_statement(){
 			}
 			else {
 				 
-				curr.addChild(Tree(to_string(lexems[ct].code)));
+				 curr.addChild(parse_lex_by_code());
 				ct++;
 			}
 		}
@@ -320,7 +347,7 @@ Tree parser::parse_statement(){
 		}
 		else {
 			 
-			curr.addChild(Tree(to_string(lexems[ct].code)));
+			 curr.addChild(parse_lex_by_code());
 			ct++;
 			curr.addChild(parse_expression());			
 			if (ct > max_ct || lexems[ct].code != ';') {
@@ -329,7 +356,7 @@ Tree parser::parse_statement(){
 			}
 			else {
 				 
-				curr.addChild(Tree(to_string(lexems[ct].code)));
+				 curr.addChild(parse_lex_by_code());
 				ct++;
 				 
 				return curr;
@@ -353,7 +380,7 @@ Tree parser::parse_expression(){
 	}
 	if (lexems[ct].code > 500 || lexems[ct].code < 1000) {
 		 
-		curr.addChild(Tree(to_string(lexems[ct].code)));
+		 curr.addChild(parse_lex_by_code());
 		ct++;
 		 
 		return curr;
@@ -396,7 +423,7 @@ Tree parser::parse_dimension(){
 	}
 	else {
 		 
-		curr.addChild(Tree(to_string(lexems[ct].code)));
+		 curr.addChild(parse_lex_by_code());
 		ct++;
 		curr.addChild(parse_expression());
 		if (ct > max_ct || lexems[ct].code != ']') {
@@ -405,7 +432,7 @@ Tree parser::parse_dimension(){
 		}
 		else {
 			 
-			curr.addChild(Tree(to_string(lexems[ct].code)));
+			 curr.addChild(parse_lex_by_code());
 			ct++;
 		}
 	}
@@ -425,7 +452,7 @@ Tree parser::parse_variable_identifier(){
 	}
 	else {
 		 
-		curr.addChild(Tree(to_string(lexems[ct].code)));
+		 curr.addChild(parse_lex_by_code());
 		ct++;
 	}
 	 
@@ -444,14 +471,19 @@ Tree parser::parse_procedure_identifier(){
 	}
 		else {
 			 
-			curr.addChild(Tree(to_string(lexems[ct].code)));
+			 curr.addChild(parse_lex_by_code());
 			ct++;			
-		}	
-	 
-	 
+		}	 
 	return curr;
 }
 
+Tree parser::parse_lex_by_code() {
+	Tree curr;
+	curr.setValue(to_string(lexems[ct].code));
+	curr.addChild(lexems[ct].ll);
+	//ct++;
+	return curr;
+}
 
 void parser::print_tree() {
 	num_of_tabs =0;
