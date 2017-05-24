@@ -4,8 +4,8 @@ void tbl::er_push(string s, unsigned int r, unsigned int i) {
 	log.push_back(err(s,r,i));
 }
 
-void tbl::push(unsigned int c, unsigned int r, unsigned int p) {
-	lexems.push_back(token(c, r, p));
+void tbl::push(unsigned int c, unsigned int r, unsigned int p,string s) {
+	lexems.push_back(token(c, r, p,s));
 }
 
 vector<token> tbl::get_lexems() {
@@ -52,7 +52,10 @@ void tbl::lex_analys(string file_path) {
 	smbls.get_ascii_table();
 	ifstream file;
 	file.open(file_path);
-	if (!file) cout << "File is empty";
+	if (!file) {
+		cout << "File is empty"<<endl;
+		throw(1);
+	}
 	file.get(ch);
 	while (file.good()) {
 		buf = "";
@@ -95,6 +98,7 @@ void tbl::lex_analys(string file_path) {
 			break;
 		case 3: //one-symbol delimiters
 			lexCode = int(ch);
+			buf += ch;
 			file.get(ch);	
 			pos=count++;
 			break;
@@ -103,7 +107,7 @@ void tbl::lex_analys(string file_path) {
 			pos=count;
 			if (!file) {
 				(*this).er_push("*)expected but eof found", row, count);
-				(*this).push(0, row, pos);
+				(*this).push(0, row, pos,buf);
 				break;
 			}
 			else {
@@ -116,7 +120,7 @@ void tbl::lex_analys(string file_path) {
 					}
 					if (!file) {
 						(*this).er_push("*)expected but eof found", row, count);
-						(*this).push(0, row, pos);
+						(*this).push(0, row, pos,buf);
 						break;
 					}
 					else {
@@ -178,7 +182,7 @@ void tbl::lex_analys(string file_path) {
 
 
 		if (!SuppressOutput) {			
-				(*this).push(lexCode, row, pos);
+				(*this).push(lexCode, row, pos,buf);
 			if (lexCode == 0)
 				(*this).er_push(buf, row, pos);
 		}

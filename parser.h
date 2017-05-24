@@ -29,8 +29,11 @@ public:
     Tree parse_expression();
     Tree parse_variable();
     Tree parse_dimension();
+	Tree parse_label();
+	Tree parse_label_list();
     Tree parse_variable_identifier();
 	Tree parse_procedure_identifier();
+	Tree parse_lex_by_code();
 	void print_tree();
 	void rec_print_tree(Tree);
 	void set_error_log();
