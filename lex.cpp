@@ -21,7 +21,7 @@ void tbl::create_lex_file() {
 	file.open("Lexem.dat");
 	file << "Lexems:" << endl;
 	for (auto it = begin(lexems); it != end(lexems); ++it) {
-		file << "Code: " << it->code << " Row: " << it->row_pos << " pos: " << it->pos<<endl;
+		file << "Code: " << it->code<<" Lexem: "<<it->ll << " Row: " << it->row_pos << " pos: " << it->pos<<endl;
 	}
 	file.close();
 	if (log.size() != 0) {

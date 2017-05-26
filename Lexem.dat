@@ -1,38 +1,31 @@
 Lexems:
-Code: 401 Row: 1 pos: 1
-Code: 1001 Row: 1 pos: 9
-Code: 59 Row: 1 pos: 13
-Code: 404 Row: 2 pos: 1
-Code: 1002 Row: 2 pos: 5
-Code: 58 Row: 2 pos: 11
-Code: 405 Row: 2 pos: 12
-Code: 91 Row: 2 pos: 20
-Code: 501 Row: 2 pos: 21
-Code: 302 Row: 2 pos: 23
-Code: 502 Row: 2 pos: 25
-Code: 93 Row: 2 pos: 27
-Code: 59 Row: 2 pos: 28
-Code: 402 Row: 3 pos: 1
-Code: 407 Row: 4 pos: 1
-Code: 407 Row: 5 pos: 1
-Code: 1003 Row: 6 pos: 1
-Code: 301 Row: 6 pos: 6
-Code: 501 Row: 6 pos: 8
-Code: 59 Row: 6 pos: 10
-Code: 407 Row: 7 pos: 1
-Code: 1002 Row: 8 pos: 1
-Code: 301 Row: 8 pos: 7
-Code: 503 Row: 8 pos: 9
-Code: 59 Row: 8 pos: 12
-Code: 1004 Row: 9 pos: 1
-Code: 301 Row: 9 pos: 9
-Code: 504 Row: 9 pos: 11
-Code: 59 Row: 9 pos: 14
-Code: 408 Row: 10 pos: 1
-Code: 59 Row: 10 pos: 8
-Code: 408 Row: 11 pos: 1
-Code: 59 Row: 11 pos: 8
-Code: 408 Row: 12 pos: 1
-Code: 59 Row: 12 pos: 8
-Code: 403 Row: 13 pos: 1
-Code: 46 Row: 13 pos: 4
+Code: 401 Lexem: PROGRAM Row: 1 pos: 1
+Code: 1001 Lexem: MYPR Row: 1 pos: 9
+Code: 59 Lexem: ; Row: 1 pos: 13
+Code: 404 Lexem: VAR Row: 2 pos: 1
+Code: 1002 Lexem: MYVAR1 Row: 2 pos: 5
+Code: 58 Lexem: : Row: 2 pos: 11
+Code: 405 Lexem: INTEGER Row: 2 pos: 12
+Code: 91 Lexem: [ Row: 2 pos: 20
+Code: 501 Lexem: 12 Row: 2 pos: 21
+Code: 302 Lexem: .. Row: 2 pos: 23
+Code: 502 Lexem: 33 Row: 2 pos: 25
+Code: 93 Lexem: ] Row: 2 pos: 27
+Code: 59 Lexem: ; Row: 2 pos: 28
+Code: 1003 Lexem: MYVAR2 Row: 3 pos: 1
+Code: 58 Lexem: : Row: 3 pos: 7
+Code: 405 Lexem: INTEGER Row: 3 pos: 8
+Code: 59 Lexem: ; Row: 3 pos: 15
+Code: 402 Lexem: BEGIN Row: 4 pos: 1
+Code: 407 Lexem: LOOP Row: 5 pos: 1
+Code: 1003 Lexem: MYVAR2 Row: 6 pos: 1
+Code: 301 Lexem: := Row: 6 pos: 7
+Code: 1002 Lexem: MYVAR1 Row: 6 pos: 9
+Code: 91 Lexem: [ Row: 6 pos: 15
+Code: 503 Lexem: 3 Row: 6 pos: 16
+Code: 93 Lexem: ] Row: 6 pos: 17
+Code: 59 Lexem: ; Row: 6 pos: 18
+Code: 408 Lexem: ENDLOOP Row: 7 pos: 1
+Code: 59 Lexem: ; Row: 7 pos: 8
+Code: 403 Lexem: END Row: 8 pos: 1
+Code: 46 Lexem: . Row: 8 pos: 4

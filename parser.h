@@ -38,5 +38,6 @@ public:
 	void rec_print_tree(Tree);
 	void set_error_log();
 	void print_error_log();
+	Tree get_tree();
 };
 

@@ -1,4 +1,4 @@
-#include "lexic.h"
+#include "table.h"
 
 void table::form_tables_from_files(string idn_path, 
 string const_path, string key_path, 

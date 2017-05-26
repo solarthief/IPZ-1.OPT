@@ -142,7 +142,7 @@ Tree parser::parse_declaration(){
 	 
 	curr.setValue("<DECLARATION>");
 	if (lexems[ct].code == 409) {
-		 curr.addChild(parse_lex_by_code());
+		curr.addChild(parse_lex_by_code());
 		ct++;
 		curr.addChild(parse_label());
 		curr.addChild(parse_label_list());
@@ -200,7 +200,7 @@ Tree parser::parse_label_list() {
 		return curr;
 	}
 	if (lexems[ct].code == ',') {
-		 curr.addChild(parse_lex_by_code());
+		curr.addChild(parse_lex_by_code());
 		ct++;
 		curr.addChild(parse_label());
 		curr.addChild(parse_label_list());
@@ -347,7 +347,7 @@ Tree parser::parse_statement(){
 		}
 		else {
 			 
-			 curr.addChild(parse_lex_by_code());
+			curr.addChild(parse_lex_by_code());
 			ct++;
 			curr.addChild(parse_expression());			
 			if (ct > max_ct || lexems[ct].code != ';') {
@@ -356,7 +356,7 @@ Tree parser::parse_statement(){
 			}
 			else {
 				 
-				 curr.addChild(parse_lex_by_code());
+				curr.addChild(parse_lex_by_code());
 				ct++;
 				 
 				return curr;
@@ -378,19 +378,19 @@ Tree parser::parse_expression(){
 		 
 		return curr;		
 	}
-	if (lexems[ct].code > 500 || lexems[ct].code < 1000) {
+	if (lexems[ct].code > 500 && lexems[ct].code < 1000) {
 		 
-		 curr.addChild(parse_lex_by_code());
+		curr.addChild(parse_lex_by_code());
 		ct++;
 		 
 		return curr;
 	}
 	else {
-		push_errors("Numeric constant expected", lexems[ct].row_pos, lexems[ct].pos);
-		throw(1);
+		curr.addChild(parse_variable());
+		//ct++;
 	}
 	
-	curr.addChild(parse_variable());
+	//curr.addChild(parse_variable());
 	 
 	 
 	return curr;
@@ -402,8 +402,7 @@ Tree parser::parse_variable(){
 	 
 	curr.setValue("<VARIABLE>");
 	curr.addChild(parse_variable_identifier());
-	curr.addChild(parse_dimension());
-	 
+	curr.addChild(parse_dimension()); 
 	 
 	return curr;
 }
@@ -413,8 +412,7 @@ Tree parser::parse_dimension(){
 	Tree curr;
 	 
 	curr.setValue("<DIMENTION>");
-	if (lexems[ct].code == 301) {
-		 
+	if (lexems[ct].code == 301 || lexems[ct].code == ';') {
 		return curr;		
 	}
 	if (ct > max_ct || lexems[ct].code != '[') {
@@ -423,7 +421,7 @@ Tree parser::parse_dimension(){
 	}
 	else {
 		 
-		 curr.addChild(parse_lex_by_code());
+		curr.addChild(parse_lex_by_code());
 		ct++;
 		curr.addChild(parse_expression());
 		if (ct > max_ct || lexems[ct].code != ']') {
@@ -499,7 +497,7 @@ void parser::rec_print_tree(Tree curr) {
 			num_of_tabs--;
 			return;
 		}
-		for (auto it = 0; it < curr.getChildren().size(); ++it) {
+		for (unsigned int it = 0; it < curr.getChildren().size(); ++it) {
 			rec_print_tree(curr.getChildren()[it]);
 		}	
 		num_of_tabs--;
@@ -528,4 +526,9 @@ void parser::print_error_log() {
 			cout << it->er << " Row: " << it->row_pos << " pos: " << it->pos << endl;
 		}
 	}
+}
+
+
+Tree parser::get_tree() {
+	return tree;
 }
