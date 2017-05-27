@@ -14,6 +14,9 @@ void generator::code_gen(string file_path) {
 	asm_file.open("file.asm");
 	asm_file.close();
 	synt_tree = PP.get_tree();
+	num_of_layers = 1;
+	is_r = false;
+	was_in_range = false;
 	code_gen_program(synt_tree.getChildren()[0]);
 }
 
@@ -58,7 +61,7 @@ void generator::code_gen_variable_declarations(Tree curr){
 	if (!curr.getChildren().size()) {
 		return;
 	}
-	cout << "data segment\n";
+	cout << "data segment";
 	code_gen_declarations_list(curr.getChildren()[1]);
 	cout << "data ends\n";
 }
@@ -84,9 +87,9 @@ void generator::code_gen_declarations_list(Tree curr) {
 //	{\n }
 void generator::code_gen_declaration(Tree curr) {
 	code_gen_variable_identifier(curr.getChildren()[0]);
-	cout << "@" + var_id;
-	code_gen_attribute(curr.getChildren()[2]);
-	code_gen_attributes_list(curr.getChildren()[3]);
+	cout << "\n@" + var_id;
+	code_gen_attribute(curr.getChildren()[2]);	
+	code_gen_attributes_list(curr.getChildren()[3]);	
 	return;
 }
 
@@ -99,8 +102,10 @@ void generator::code_gen_attributes_list(Tree curr) {
 	if (!curr.getChildren().size()) {
 		return;
 	}
-	code_gen_attribute(curr.getChildren()[0]);
-	code_gen_attributes_list(curr.getChildren()[1]);
+	else {
+		code_gen_attribute(curr.getChildren()[0]);
+		code_gen_attributes_list(curr.getChildren()[1]);
+	}
 	return;
 }
 
@@ -109,13 +114,38 @@ void generator::code_gen_attributes_list(Tree curr) {
 //Semantic:
 //	{\n }
 void generator::code_gen_attribute(Tree curr) {
-	if (curr.getChildren()[0].getValue() == to_string(405))
-		cout << " dw ?\n";
-	else if (curr.getChildren()[0].getValue() == to_string(405))
-		cout << " dd ?\n";
+	if (curr.getChildren()[0].getValue() == to_string(405)) {
+		cout << " dw ";	
+	}		
+	else {
+		if (curr.getChildren()[0].getValue() == to_string(406))
+		{
+			cout << " dd ";
+		}
+		else {
+			code_gen_range(curr.getChildren()[1]);
+			return;
+		}
+	}
+	if (was_in_range) {
+		cout << "?\n";
+		was_in_range = false;
+	}
 	return;
 }
 
+//Rule #9
+//	<RANGE> -> <UNSIGNED-INTEGER>..<UNSIGNED-INTEGER> 
+//Semantic:
+//	{\n }
+void generator::code_gen_range(Tree curr) {
+	was_in_range = true;
+	int a=stoi(curr.getChildren()[0].getChildren()[0].getValue());
+	int b=stoi(curr.getChildren()[2].getChildren()[0].getValue());
+	int range = a-b;
+	cout<<abs(range)<<" dup (0)";	
+	return;
+}
 
 //Rule #10
 //	<STATEMENTS-LIST> -> <STATEMENT><STATEMENTS-LIST>
@@ -127,8 +157,10 @@ void generator::code_gen_statements_list(Tree curr) {
 		cout << "nop\n";
 		return;
 	}
-	code_gen_statement(curr.getChildren()[0]);
-	code_gen_statements_list(curr.getChildren()[1]);
+	else {
+		code_gen_statement(curr.getChildren()[0]);
+		code_gen_statements_list(curr.getChildren()[1]);
+	}
 	return;
 }
 
@@ -137,15 +169,17 @@ void generator::code_gen_statements_list(Tree curr) {
 //						|LOOP <STATEMENT-LIST> ENDLOOP;
 //Semantic:
 //	{\n [2][1]}
-void generator::code_gen_statement(Tree curr) {
+void generator::code_gen_statement(Tree curr) {	
 	if (curr.getChildren()[0].getValue() == to_string(407)) {
-		cout << "L:\n";
+		unsigned int current_layer = num_of_layers++;
+		cout << "L"+to_string(current_layer)+ ": \n";
 		code_gen_statements_list(curr.getChildren()[1]);
-		cout << "goto L\n";
+		cout << "jmp L"+to_string(current_layer)+ ": \n";
+		num_of_layers--;
 	}		
 	else {
-		code_gen_variable(curr.getChildren()[0]);
 		code_gen_expression(curr.getChildren()[2]);
+		code_gen_variable(curr.getChildren()[0]);			
 	}
 	return;
 }
@@ -156,11 +190,19 @@ void generator::code_gen_statement(Tree curr) {
 //Semantic:
 //	{\n [2][1]}
 void generator::code_gen_expression(Tree curr) {
-	if (stoi(curr.getValue())>500&& stoi(curr.getValue())<1000) {
-		cout << curr.getChildren()[0].getValue();
-		return;
+	if (!is_r) {
+		cout << "mov ax, ";
 	}
-		
+	if (curr.getChildren()[0].getValue() == "<VARIABLE>") {
+		is_r = true;
+		code_gen_variable(curr.getChildren()[0]);		
+	}
+	else if (stoi(curr.getChildren()[0].getValue())>500&& stoi(curr.getChildren()[0].getValue())<1000) {
+		cout << curr.getChildren()[0].getChildren()[0].getValue();
+		is_r = false;
+		return;
+	}	
+
 	return;
 }
 
@@ -170,7 +212,18 @@ void generator::code_gen_expression(Tree curr) {
 //Semantic:
 //	{\n [2][1]}
 void generator::code_gen_variable(Tree curr) {
-	
+	bool qqw=is_r;
+	code_gen_variable_identifier(curr.getChildren()[0]);
+	if (!qqw) {
+		cout << "\nmov @" + var_id;
+	}
+	else {
+		cout <<"@"+var_id;
+	}
+	code_gen_dimension(curr.getChildren()[1]);
+	if (!qqw) {
+		cout << ", ax\n";
+	}
 	return;
 }
 
@@ -183,7 +236,13 @@ void generator::code_gen_dimension(Tree curr) {
 	if (!curr.getChildren().size()) {
 		return;
 	}
-	code_gen_expression(curr.getChildren()[1]);
+	else {
+		cout << "[";
+		is_r = true;
+		code_gen_expression(curr.getChildren()[1]);
+		cout << "]";
+		is_r = false;
+	}
 	return;
 }
 

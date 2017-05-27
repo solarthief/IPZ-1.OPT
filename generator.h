@@ -10,6 +10,9 @@ private:
 	string var_id;
 	string var_type;
 	string uns_int;
+	unsigned int num_of_layers;
+	bool is_r;
+	bool was_in_range;
 public:
 	void code_gen(string);
 	void code_gen_program(Tree);
