@@ -1,13 +1,15 @@
-#pragma once
+#ifndef TRANSLATOR_PARSER_H_
+#define TRANSLATOR_PARSER_H_
 #include "lex.h"
 #include "tree.h"
+#endif
 
 class parser {
 private:
 	vector<token> lexems;
 	Tree tree;
 	unsigned int ct;
-	unsigned int max_ct;
+	size_t max_ct;
 	char fill_symbol;
 	unsigned int num_of_tabs;
 public:

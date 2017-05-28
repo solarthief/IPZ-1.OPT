@@ -1,5 +1,10 @@
-#pragma once
-#include "table.h"
+#ifndef TRANSLATOR_TREE_H_
+#define TRANSLATOR_TREE_H_
+#include <string>
+#include <vector>
+#endif
+
+using namespace std;
 
 class Tree{
 private:
@@ -16,19 +21,4 @@ public:
 	vector< Tree > getChildren();
 };
 
-void Tree::setValue(const string& data) {
-	value = data;
-	p_is_empty = false;
-}
 
-void Tree::addChild(Tree tt) {
-	if(!p_is_empty)	children.push_back(tt);
-}
-
-string Tree::getValue() {
-	return value;
-}
-
-vector< Tree > Tree::getChildren() {
-	return children;
-}

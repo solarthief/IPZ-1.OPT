@@ -1,6 +1,7 @@
-#pragma once
+#ifndef TRANSLATOR_GENERATOR_H_
+#define TRANSLATOR_GENERATOR_H_
 #include "parser.h"
-
+#endif
 
 class generator {
 private:
@@ -8,6 +9,7 @@ private:
 	parser PP;
 	string proc_id;
 	string var_id;	
+	ofstream asm_file;
 	vector<string> varbls;
 	vector<string> labels;
 	unsigned int num_of_layers;

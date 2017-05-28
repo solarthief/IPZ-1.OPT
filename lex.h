@@ -1,6 +1,7 @@
-#pragma once
+#ifndef TRANSLATOR_LEX_H_
+#define TRANSLATOR_LEX_H_
 #include "table.h"
-
+#endif
 
 struct token {
 	unsigned int code;

@@ -1,9 +1,11 @@
-#pragma once
+#ifndef TRANSLATOR_TABLE_H_
+#define TRANSLATOR_TABLE_H_
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <vector>
 #include <map>
+#endif
 using namespace std;
 
 struct idn {
@@ -24,12 +26,11 @@ private:
 	vector<idn>key_table;
 	vector<cdn>const_table;
 public:
-	void form_tables_from_files(string idn_path = "identifier_table.dat",
-		string const_path = "const_table.dat", string key_path = "keyword_table.dat",
-		string delim_path = "mdelim_table.dat");
-	void print_table();
-	void update_tables(string idn_path = "identifier_table.dat",
-		string const_path = "const_table.dat");
+	void form_tables_from_files(string idn_path = "table\\identifier_table.dat",
+		string const_path = "table\\const_table.dat", string key_path = "table\\keyword_table.dat",
+		string delim_path = "table\\mdelim_table.dat");	
+	void update_tables(string idn_path = "table\\identifier_table.dat",
+		string const_path = "table\\const_table.dat");
 	unsigned int const_tab_search(int);
 	unsigned int idn_tab_search(string);
 	unsigned int key_tab_search(string);
@@ -42,5 +43,5 @@ public:
 	int operator[](const int i) {
 		return code[i];
 	};
-	void get_ascii_table(string as_path = "ascii_code.dat");
+	void get_ascii_table(string as_path = "table\\ascii_code.dat");
 };

@@ -341,9 +341,7 @@ Tree parser::parse_statement(){
 				return curr;
 			}
 		}
-	}
-	 
-	 
+	}	 
 	return curr;
 }
 
