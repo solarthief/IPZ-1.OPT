@@ -28,8 +28,7 @@ public:
 	void push(unsigned int, unsigned int, unsigned int,string s);
 	void er_push(string, unsigned int, unsigned int);
 	vector<token> get_lexems();
-	vector<err> get_errors();
-	void print_lexems();
+	vector<err> get_errors();	
 	void create_lex_file();	
 };
 

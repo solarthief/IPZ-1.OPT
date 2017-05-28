@@ -17,6 +17,7 @@ void generator::code_gen(string file_path) {
 	num_of_layers = 1;
 	is_r = false;
 	was_in_range = false;
+	
 	code_gen_program(synt_tree.getChildren()[0]);
 }
 
@@ -86,10 +87,16 @@ void generator::code_gen_declarations_list(Tree curr) {
 //Semantic:
 //	{\n }
 void generator::code_gen_declaration(Tree curr) {
+	was_declared = false;
 	code_gen_variable_identifier(curr.getChildren()[0]);
+	if (find(varbls.begin(), varbls.end(), var_id) != varbls.end()||var_id==proc_id) {
+		throw("Double declaration "+ curr.getChildren()[0].getChildren()[0].getChildren()[0].getValue());
+	}
+	varbls.push_back(var_id);
 	cout << "\n@" + var_id;
 	code_gen_attribute(curr.getChildren()[2]);	
-	code_gen_attributes_list(curr.getChildren()[3]);	
+	code_gen_attributes_list(curr.getChildren()[3]);
+	was_declared = false;
 	return;
 }
 
@@ -115,12 +122,18 @@ void generator::code_gen_attributes_list(Tree curr) {
 //	{\n }
 void generator::code_gen_attribute(Tree curr) {
 	if (curr.getChildren()[0].getValue() == to_string(405)) {
+		if (was_declared) {
+			throw(string("Type was already declared"));
+		}
 		cout << " dw ";	
+		was_declared = true;
 	}		
 	else {
 		if (curr.getChildren()[0].getValue() == to_string(406))
 		{
+			throw(string("Type was already declared"));
 			cout << " dd ";
+			was_declared = true;
 		}
 		else {
 			code_gen_range(curr.getChildren()[1]);

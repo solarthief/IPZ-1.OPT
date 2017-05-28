@@ -1,6 +1,6 @@
 #include "generator.h"
 
-int main() {	
+int main(int argc, char** argv) {	
 	string f_name;
 	generator pp;
 	parser t;
@@ -11,9 +11,16 @@ int main() {
 		//t.print_tree();
 		pp.code_gen(f_name);
 	}
-	catch (...) {
-		cout << "ERROR found. Read error log" << endl;
-		//t.print_error_log();
+	catch (string s) {
+		cout << s << endl;		
 	}	
+	catch (vector<err> t) {
+		for (auto it = t.begin(); it != t.end(); it++) {
+			cout<<  it->er << " Row: " << it->row_pos << " pos: " << it->pos << endl;
+		}
+	}
+	catch (...) {
+		cout << "ERROR";
+	}
 	return 0;
 }

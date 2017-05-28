@@ -7,12 +7,13 @@ private:
 	Tree synt_tree;
 	parser PP;
 	string proc_id;
-	string var_id;
-	string var_type;
-	string uns_int;
+	string var_id;	
+	vector<string> varbls;
+	vector<string> labels;
 	unsigned int num_of_layers;
 	bool is_r;
 	bool was_in_range;
+	bool was_declared;
 public:
 	void code_gen(string);
 	void code_gen_program(Tree);

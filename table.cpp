@@ -44,26 +44,6 @@ string delim_path) {
 	const_file.close();
 }
 
-void table::print_table() {
-	cout << "Identifier table" << endl;
-	for (auto it = begin(idn_table); it != end(idn_table); ++it)
-	{
-		cout << "Code: " << it->i << " IDN: " << it->name<<endl;
-	}
-
-	cout << "\nKeywords table" << endl;
-	for (auto it = begin(key_table); it != end(key_table); ++it)
-	{
-		cout << "Code: " << it->i << " Keyword: " << it->name<<endl;
-	}
-
-	cout << "\nConst table" << endl;
-	for (auto it = begin(const_table); it != end(const_table); ++it)
-	{
-		cout << "Code: " << it->i << " Keyword: " << it->value<<endl;
-	}
-
-}
 
 void table::update_tables(string idn_path, string const_path) {
 	ofstream idn_file;

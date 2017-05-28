@@ -33,12 +33,6 @@ void tbl::create_lex_file() {
 	}
 }
 
-void tbl::print_lexems() {
-	cout << "Lexems:" << endl;
-	for (auto it = begin(lexems); it != end(lexems); ++it) {
-		cout << "Code: " << it->code << " Row: " << it->row_pos << " pos: " << it->pos << endl;
-	}
-}
 
 void tbl::lex_analys(string file_path) {
 	char ch;
@@ -53,8 +47,7 @@ void tbl::lex_analys(string file_path) {
 	ifstream file;
 	file.open(file_path);
 	if (!file) {
-		cout << "File is empty"<<endl;
-		throw(1);
+		throw("File is empty");
 	}
 	file.get(ch);
 	while (file.good()) {
@@ -186,6 +179,9 @@ void tbl::lex_analys(string file_path) {
 			if (lexCode == 0)
 				(*this).er_push(buf, row, pos);
 		}
+	}
+	if (!log.empty()) {
+		throw(log);
 	}
 	TT.update_tables();
 	(*this).create_lex_file();

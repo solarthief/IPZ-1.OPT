@@ -5,17 +5,15 @@
 class parser {
 private:
 	vector<token> lexems;
-	vector<err> errors;
 	Tree tree;
 	unsigned int ct;
 	unsigned int max_ct;
 	char fill_symbol;
 	unsigned int num_of_tabs;
 public:
-	parser(): lexems(),errors() {};
-	parser(const parser &pp): lexems(pp.lexems), errors(pp.errors) {};
-	void push_errors(string,unsigned int,unsigned int);
-    void pars(string);
+	parser(): lexems() {};
+	parser(const parser &pp): lexems(pp.lexems) {};	
+    Tree pars(string);
 	Tree parse_program();
 	Tree parse_block();
     Tree parse_variable_declarations();
@@ -35,9 +33,7 @@ public:
 	Tree parse_procedure_identifier();
 	Tree parse_lex_by_code();
 	void print_tree();
-	void rec_print_tree(Tree);
-	void set_error_log();
-	void print_error_log();
+	void rec_print_tree(Tree);	
 	Tree get_tree();
 };
 

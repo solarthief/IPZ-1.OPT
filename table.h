@@ -38,8 +38,7 @@ public:
 class ascii_code {
 private:
 	map<const int, unsigned int> code;
-public:
-	//ascii_code() : {};
+public:	
 	int operator[](const int i) {
 		return code[i];
 	};
