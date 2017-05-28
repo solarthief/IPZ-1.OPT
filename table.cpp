@@ -1,3 +1,8 @@
+//File: table.cpp
+//Abstract: contains realisation of table class
+//			uses to get data from tables needed for translator work		
+//Copyright (c) 2017 by Maxim Yakovenko
+
 #include "table.h"
 
 void table::form_tables_from_files(string idn_path, 

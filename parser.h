@@ -1,3 +1,8 @@
+//File: parser.h
+//Abstract: contains declaration of parser class
+//
+//Copyright (c) 2017 by Maxim Yakovenko
+
 #ifndef TRANSLATOR_PARSER_H_
 #define TRANSLATOR_PARSER_H_
 #include "lex.h"
@@ -13,29 +18,28 @@ private:
 	char fill_symbol;
 	unsigned int num_of_tabs;
 public:
-	parser(): lexems() {};
-	parser(const parser &pp): lexems(pp.lexems) {};	
-    Tree pars(string);
+	parser() : lexems() {};
+	parser(const parser &pp) : lexems(pp.lexems) {};
+	Tree pars(string);
 	Tree parse_program();
 	Tree parse_block();
-    Tree parse_variable_declarations();
-    Tree parse_declarations_list();
-    Tree parse_declaration();
-    Tree parse_attributes_list();
-    Tree parse_attribute();
-    Tree parse_range();
-    Tree parse_statements_list();
-    Tree parse_statement();
-    Tree parse_expression();
-    Tree parse_variable();
-    Tree parse_dimension();
+	Tree parse_variable_declarations();
+	Tree parse_declarations_list();
+	Tree parse_declaration();
+	Tree parse_attributes_list();
+	Tree parse_attribute();
+	Tree parse_range();
+	Tree parse_statements_list();
+	Tree parse_statement();
+	Tree parse_expression();
+	Tree parse_variable();
+	Tree parse_dimension();
 	Tree parse_label();
 	Tree parse_label_list();
-    Tree parse_variable_identifier();
+	Tree parse_variable_identifier();
 	Tree parse_procedure_identifier();
 	Tree parse_lex_by_code();
 	void print_tree();
-	void rec_print_tree(Tree);	
-	Tree get_tree();
+	void rec_print_tree(Tree);
 };
 

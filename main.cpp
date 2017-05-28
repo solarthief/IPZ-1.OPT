@@ -1,5 +1,9 @@
-#include "generator.h"
+//File: main.cpp
+//Abstract: main
+//
+//Copyright (c) 2017 by Maxim Yakovenko
 
+#include "generator.h"
 
 int main(int argc, char** argv) {	
 	string file_path;

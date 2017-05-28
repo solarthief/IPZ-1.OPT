@@ -1,13 +1,17 @@
+//File: generator.cpp
+//Abstract: contains realisation of generator class
+//			uses for generating asm code from AST
+//Copyright (c) 2017 by Maxim Yakovenko
+
 #include "generator.h"
 
 
 //Rule #1
 //	<SIGNAL-PROGRAM> -> <PROGRAM>
 void generator::code_gen(string file_path) {
-	PP.pars(file_path);
+	synt_tree=PP.pars(file_path);
 	file_path= file_path.erase(file_path.find_last_of("."));
-	asm_file.open(file_path+".asm");	
-	synt_tree = PP.get_tree();
+	asm_file.open(file_path+".asm");		
 	num_of_layers = 1;
 	is_r = false;
 	was_in_range = false;	
@@ -189,8 +193,7 @@ void generator::code_gen_expression(Tree curr) {
 }
 
 //Rule #13
-//	<VARIABLE> -> <VARIABLE-IDENTIFIER><DIMENTION>
-//							
+//	<VARIABLE> -> <VARIABLE-IDENTIFIER><DIMENTION>					
 void generator::code_gen_variable(Tree curr) {
 	bool qqw=is_r;
 	code_gen_variable_identifier(curr.getChildren()[0]);
@@ -226,8 +229,7 @@ void generator::code_gen_dimension(Tree curr) {
 
 
 //Rule #15
-//	<VARIABLE-IDENTIFIER> -> <IDENTIFIER>
-//							
+//	<VARIABLE-IDENTIFIER> -> <IDENTIFIER>						
 void generator::code_gen_variable_identifier(Tree curr) {
 	var_id = curr.getChildren()[0].getValue();
 	return;
@@ -235,7 +237,6 @@ void generator::code_gen_variable_identifier(Tree curr) {
 
 //Rule #16
 //	<PROCEDURE-IDENTIFIER> -> <IDENTIFIER>
-//
 void generator::code_gen_procedure_identifier(Tree curr) {
 	proc_id = curr.getChildren()[0].getValue();
 	return;

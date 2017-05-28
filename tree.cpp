@@ -1,3 +1,8 @@
+//File: tree.h
+//Abstract: contains realisation of tree class
+//			that uses as AST for generator
+//Copyright (c) 2017 by Maxim Yakovenko
+
 #include "tree.h"
 
 void Tree::setValue(const string& data) {

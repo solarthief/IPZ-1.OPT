@@ -1,7 +1,14 @@
+//File: parser.cpp
+//Abstract: contains realisation of parser class
+//			creates AST from vector of lexems
+//Copyright (c) 2017 by Maxim Yakovenko
+
 #include "parser.h"
 
+//Rule #1
+//	<SIGNAL-PROGRAM> -> <PROGRAM>
 Tree parser::pars(string file_path){
-	tbl TT;
+	lexem TT;
 	TT.lex_analys(file_path);
 	lexems = TT.get_lexems();	
 	ct = 0;	 
@@ -11,6 +18,9 @@ Tree parser::pars(string file_path){
 	return tree;
 }
 
+//Rule #2
+//	<PROGRAM> -> PROGRAM <PROCEDURE-IDENTIFIER> ;
+//					<BLOCK>.
 Tree parser::parse_program(){
 	 
 	Tree curr;
@@ -42,7 +52,9 @@ Tree parser::parse_program(){
 	return curr;
 }
 
-
+//Rule #3
+//	<BLOCK> -> <VARIABLE-DECLARATION> BEGIN 
+//					<STATEMENTS-LIST> END
 Tree parser::parse_block(){
 	 
 	Tree curr;
@@ -76,7 +88,9 @@ Tree parser::parse_block(){
 	return curr;
 }
 
-
+//Rule #4
+//	<VARIABLE-DECLARATION> -> VAR <DECLARATIONS-LIST>
+//									|<empty>
 Tree parser::parse_variable_declarations(){
 	 
 	Tree curr;
@@ -101,6 +115,9 @@ Tree parser::parse_variable_declarations(){
 	return curr;
 }
 
+//Rule #5
+//	<DECLARATIONS-LIST> -> <DECLARATION> <DECLARATIONS-LIST>
+//									|<empty>
 Tree parser::parse_declarations_list(){
 	 
 	Tree curr;
@@ -116,7 +133,9 @@ Tree parser::parse_declarations_list(){
 	return curr;
 }
 
-
+//Rule #6
+//	<DECLARATION> -> <VARIABLE-IDENTIFIER> :
+//						<ATTRIBUTE><ATTRIBUTES-LIST> ;
 Tree parser::parse_declaration(){
 	 
 	Tree curr;
@@ -163,6 +182,7 @@ Tree parser::parse_declaration(){
 	return curr;
 }
 
+
 Tree parser::parse_label() {
 	Tree curr;
 	curr.setValue("<LABEL>");
@@ -172,6 +192,7 @@ Tree parser::parse_label() {
 	}
 	return curr;
 }
+
 
 Tree parser::parse_label_list() {
 	Tree curr;
@@ -188,6 +209,9 @@ Tree parser::parse_label_list() {
 	return curr;
 }
 
+//Rule #7
+//	<ATTRIBUTES-LIST> -> <ATTRIBUTE><ATTRIBUTES-LIST>
+//						| <EMPTY> ;
 Tree parser::parse_attributes_list(){	 
 	Tree curr;
 	 curr.setValue("<ATTRIBUTES-LIST>");
@@ -201,7 +225,8 @@ Tree parser::parse_attributes_list(){
 	return curr;
 }
 
-
+//Rule #8
+//	<ATTRIBUTE> -> INTEGER | FLOAT | [<range>] ;
 Tree parser::parse_attribute(){
 	 
 	Tree curr;	 
@@ -234,7 +259,8 @@ Tree parser::parse_attribute(){
 	return curr;
 }
 
-
+//Rule #9
+//	<RANGE> -> <UNSIGNED-INTEGER>..<UNSIGNED-INTEGER> 
 Tree parser::parse_range(){
 	 
 	Tree curr;
@@ -272,7 +298,9 @@ Tree parser::parse_range(){
 	return curr;
 }
 
-
+//Rule #10
+//	<STATEMENTS-LIST> -> <STATEMENT><STATEMENTS-LIST>
+//							|<EMPTY>
 Tree parser::parse_statements_list(){
 	 
 	Tree curr;
@@ -289,6 +317,9 @@ Tree parser::parse_statements_list(){
 	return curr;
 }
 
+//Rule #11
+//	<STATEMENTS> -> <VARIABLE>:=<EXPRESSION>;
+//						|LOOP <STATEMENT-LIST> ENDLOOP;
 Tree parser::parse_statement(){
 	 
 	Tree curr;
@@ -345,7 +376,9 @@ Tree parser::parse_statement(){
 	return curr;
 }
 
-
+//Rule #12
+//	<EXPRESSION> -> <VARIABLE>
+//					|<UNSIGNED-INTEGER>
 Tree parser::parse_expression(){
 	 
 	Tree curr;
@@ -373,6 +406,8 @@ Tree parser::parse_expression(){
 	return curr;
 }
 
+//Rule #13
+//	<VARIABLE> -> <VARIABLE-IDENTIFIER><DIMENTION>		
 Tree parser::parse_variable(){
 	 
 	Tree curr;
@@ -384,6 +419,9 @@ Tree parser::parse_variable(){
 	return curr;
 }
 
+//Rule #14
+//	<DIMENSION> -> [<EXPRESSION>]
+//					|<EMPTY>
 Tree parser::parse_dimension(){
 	 
 	Tree curr;
@@ -414,6 +452,8 @@ Tree parser::parse_dimension(){
 	return curr;
 }
 
+//Rule #15
+//	<VARIABLE-IDENTIFIER> -> <IDENTIFIER>	
 Tree parser::parse_variable_identifier(){
 	 
 	Tree curr;
@@ -431,6 +471,8 @@ Tree parser::parse_variable_identifier(){
 	return curr;
 }
 
+//Rule #16
+//	<PROCEDURE-IDENTIFIER> -> <IDENTIFIER>
 Tree parser::parse_procedure_identifier(){
 	 
 	Tree curr;
@@ -451,8 +493,7 @@ Tree parser::parse_procedure_identifier(){
 Tree parser::parse_lex_by_code() {
 	Tree curr;
 	curr.setValue(to_string(lexems[ct].code));
-	curr.addChild(lexems[ct].ll);
-	//ct++;
+	curr.addChild(lexems[ct].name);
 	return curr;
 }
 
@@ -475,8 +516,4 @@ void parser::rec_print_tree(Tree curr) {
 		}	
 		num_of_tabs--;
 		return;
-}
-
-Tree parser::get_tree() {
-	return tree;
 }

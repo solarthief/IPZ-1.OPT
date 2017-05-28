@@ -1,3 +1,8 @@
+//File: generator.h
+//Abstract: contains declaration of generator class
+//
+//Copyright (c) 2017 by Maxim Yakovenko
+
 #ifndef TRANSLATOR_GENERATOR_H_
 #define TRANSLATOR_GENERATOR_H_
 #include "parser.h"

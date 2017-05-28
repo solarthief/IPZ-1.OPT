@@ -1,27 +1,32 @@
+//File: lex.cpp
+//Abstract: contains realisation of lexem class
+//			uses for creating vector of tokens for parser 
+//Copyright (c) 2017 by Maxim Yakovenko
+
 #include "lex.h"
 
-void tbl::er_push(string s, unsigned int r, unsigned int i) {
+void lexem::er_push(string s, unsigned int r, unsigned int i) {
 	log.push_back(err(s,r,i));
 }
 
-void tbl::push(unsigned int c, unsigned int r, unsigned int p,string s) {
+void lexem::push(unsigned int c, unsigned int r, unsigned int p,string s) {
 	lexems.push_back(token(c, r, p,s));
 }
 
-vector<token> tbl::get_lexems() {
+vector<token> lexem::get_lexems() {
 	return (*this).lexems;
 }
 
-vector<err> tbl::get_errors() {
+vector<err> lexem::get_errors() {
 	return (*this).log;
 }
 
-void tbl::create_lex_file() {
+void lexem::create_lex_file() {
 	ofstream file;
 	file.open("Lexem.dat");
 	file << "Lexems:" << endl;
 	for (auto it = begin(lexems); it != end(lexems); ++it) {
-		file << "Code: " << it->code<<" Lexem: "<<it->ll << " Row: " << it->row_pos << " pos: " << it->pos<<endl;
+		file << "Code: " << it->code<<" Lexem: "<<it->name << " Row: " << it->row_pos << " pos: " << it->pos<<endl;
 	}
 	file.close();
 	if (log.size() != 0) {
@@ -34,7 +39,7 @@ void tbl::create_lex_file() {
 }
 
 
-void tbl::lex_analys(string file_path) {
+void lexem::lex_analys(string file_path) {
 	char ch;
 	string buf;
 	unsigned int row = 1, pos = 1,count=1;

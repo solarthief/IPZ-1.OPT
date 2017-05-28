@@ -1,3 +1,8 @@
+//File: table.h
+//Abstract: contains declaration of table class
+//			and support structures
+//Copyright (c) 2017 by Maxim Yakovenko
+
 #ifndef TRANSLATOR_TABLE_H_
 #define TRANSLATOR_TABLE_H_
 #include <iostream>

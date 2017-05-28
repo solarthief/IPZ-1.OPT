@@ -1,3 +1,8 @@
+//File: lex.h
+//Abstract: contains declaration of lexem class
+//			and support structures
+//Copyright (c) 2017 by Maxim Yakovenko
+
 #ifndef TRANSLATOR_LEX_H_
 #define TRANSLATOR_LEX_H_
 #include "table.h"
@@ -5,10 +10,10 @@
 
 struct token {
 	unsigned int code;
-	string ll;
+	string name;
 	unsigned int row_pos;
 	unsigned int pos;
-	token(unsigned int c, unsigned int r, unsigned int p, string s) :code(c), row_pos(r), pos(p), ll(s) {};
+	token(unsigned int c, unsigned int r, unsigned int p, string s) :code(c), row_pos(r), pos(p), name(s) {};
 };
 
 struct err {
@@ -18,13 +23,13 @@ struct err {
 	err(string c, unsigned int r, unsigned int p) :er(c), row_pos(r), pos(p) {};
 };
 
-class tbl {
+class lexem {
 private:
 	vector<token> lexems;
 	vector<err> log;
 public:
-	tbl() :lexems() {};
-	tbl(const tbl &l) :lexems(l.lexems) {};
+	lexem() :lexems() {};
+	lexem(const lexem &l) :lexems(l.lexems) {};
 	void lex_analys(string file_path);
 	void push(unsigned int, unsigned int, unsigned int,string s);
 	void er_push(string, unsigned int, unsigned int);

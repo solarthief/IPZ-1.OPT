@@ -1,3 +1,8 @@
+//File: tree.h
+//Abstract: contains declaration of tree class
+//
+//Copyright (c) 2017 by Maxim Yakovenko
+
 #ifndef TRANSLATOR_TREE_H_
 #define TRANSLATOR_TREE_H_
 #include <string>
