@@ -136,6 +136,7 @@ Tree parser::parse_declarations_list(){
 //Rule #6
 //	<DECLARATION> -> <VARIABLE-IDENTIFIER> :
 //						<ATTRIBUTE><ATTRIBUTES-LIST> ;
+//					Additional:	LABEL<LABEL><LABEL-LIST>;		
 Tree parser::parse_declaration(){
 	 
 	Tree curr;
@@ -183,6 +184,9 @@ Tree parser::parse_declaration(){
 }
 
 
+//Additional rule #1
+//	<LABEL> -> <UNSIGNED-INTEGER>	
+//
 Tree parser::parse_label() {
 	Tree curr;
 	curr.setValue("<LABEL>");
@@ -193,7 +197,10 @@ Tree parser::parse_label() {
 	return curr;
 }
 
-
+//Additional rule #2
+//	<LABEL-LIST> -> ,<LABEL><LABEL-LIST>|
+//						<EMPTY>	
+//
 Tree parser::parse_label_list() {
 	Tree curr;
 	curr.setValue("<LABEL-LIST>");
@@ -388,11 +395,9 @@ Tree parser::parse_expression(){
 		 
 		return curr;		
 	}
-	if (lexems[ct].code > 500 && lexems[ct].code < 1000) {
-		 
+	if (lexems[ct].code > 500 && lexems[ct].code < 1000) {		 
 		curr.addChild(parse_lex_by_code());
-		ct++;
-		 
+		ct++;		 
 		return curr;
 	}
 	else {
@@ -459,8 +464,7 @@ Tree parser::parse_variable_identifier(){
 	Tree curr;
 	 
 	curr.setValue("<VARIABLE-IDENTIFIER>");
-	if (ct > max_ct || lexems[ct].code < 1000) {
-		 
+	if (ct > max_ct || lexems[ct].code < 1000) {		 
 		throw("Variable expected   row:" + to_string(lexems[ct].row_pos) + " pos: " + to_string(lexems[ct].pos));
 	}
 	else {		 
@@ -478,8 +482,7 @@ Tree parser::parse_procedure_identifier(){
 	Tree curr;
 	 
 	curr.setValue("<PROCEDURE-IDENTIFIER>");
-	if (ct > max_ct || lexems[ct].code < 1000) {
-		 
+	if (ct > max_ct || lexems[ct].code < 1000) {		 
 		throw("Variable expected   row: " + to_string(lexems[ct].row_pos) + " pos: " + to_string(lexems[ct].pos));
 	}
 		else {

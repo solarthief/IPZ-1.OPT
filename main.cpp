@@ -1,12 +1,12 @@
 //File: main.cpp
-//Abstract: main
+//Abstract: main file
 //
 //Copyright (c) 2017 by Maxim Yakovenko
 
 #include "generator.h"
 
 int main(int argc, char** argv) {	
-	string file_path;
+	string file_path;	
 	generator pp;	
 	if (argc < 2) {
 		cout << "Enter name of file[.sig]: ";

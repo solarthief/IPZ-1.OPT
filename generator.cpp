@@ -35,11 +35,11 @@ void generator::code_gen_program(Tree curr) {
 //					<STATEMENTS-LIST> END
 void generator::code_gen_block(Tree curr) {
 	code_gen_variable_declarations(curr.getChildren()[0]);
-	asm_file << "\ncode segment \nassume cs: code \nds: data\n";
-	asm_file << "\n@" + proc_id + ":\n";
+	asm_file << "\n@"+proc_id+"_prog" +" segment \nassume cs: code \nds: data\n";
+	asm_file << "\nstart:\n";
 	asm_file << "mov ax,data\nmov ds,ax\n";
 	code_gen_statements_list(curr.getChildren()[2]);
-	asm_file << "mov ax, 4c00h \nint 21h \ncode ends \nend @" + proc_id << endl;
+	asm_file << "mov ax, 4c00h \nint 21h \n@"+ proc_id + "_prog" +" ends \nend start" << endl;
 	return;
 }
 
@@ -71,16 +71,23 @@ void generator::code_gen_declarations_list(Tree curr) {
 //Rule #6
 //	<DECLARATION> -> <VARIABLE-IDENTIFIER> :
 //						<ATTRIBUTE><ATTRIBUTES-LIST> ;
+//				Additional:	LABEL <LABEL> <LABEL-LIST> ;	
 void generator::code_gen_declaration(Tree curr) {
 	was_declared = false;
-	code_gen_variable_identifier(curr.getChildren()[0]);
-	if (find(varbls.begin(), varbls.end(), var_id) != varbls.end()||var_id==proc_id) {
-		throw("Double declaration "+ curr.getChildren()[0].getChildren()[0].getChildren()[0].getValue());
+	if (curr.getChildren()[0].getValue() == to_string(409)) {
+		code_gen_label(curr.getChildren()[1]);
+		code_gen_label_list(curr.getChildren()[2]);
 	}
-	varbls.push_back(var_id);
-	asm_file << "\n@" + var_id;
-	code_gen_attribute(curr.getChildren()[2]);	
-	code_gen_attributes_list(curr.getChildren()[3]);
+	else {
+		code_gen_variable_identifier(curr.getChildren()[0]);
+		if (find(varbls.begin(), varbls.end(), var_id) != varbls.end() || var_id == proc_id) {
+			throw("Double declaration " + curr.getChildren()[0].getChildren()[0].getChildren()[0].getValue());
+		}
+		varbls.push_back(var_id);
+		asm_file << "\n@" + var_id;
+		code_gen_attribute(curr.getChildren()[2]);
+		code_gen_attributes_list(curr.getChildren()[3]);
+	}
 	was_declared = false;
 	return;
 }
@@ -240,4 +247,31 @@ void generator::code_gen_variable_identifier(Tree curr) {
 void generator::code_gen_procedure_identifier(Tree curr) {
 	proc_id = curr.getChildren()[0].getValue();
 	return;
+}
+
+
+//Additional rule #1
+//	<LABEL> -> <UNSIGNED-INTEGER>	
+void generator::code_gen_label(Tree curr) {
+	if (find(labels.begin(), labels.end(), curr.getChildren()[0].getChildren()[0].getValue()) != labels.end()) {
+		throw("Labels double declaration " + curr.getChildren()[0].getChildren()[0].getValue());
+	}
+	else {
+		labels.push_back(curr.getChildren()[0].getValue());		
+	}	
+	return;
+}
+
+//Additional rule #2
+//	<LABEL-LIST> -> ,<LABEL><LABEL-LIST>|
+//						<EMPTY>	
+void generator::code_gen_label_list(Tree curr) {
+	if (!curr.getChildren().size()) {
+		return;
+	}
+	else {
+		code_gen_label(curr.getChildren()[1]);
+		code_gen_label_list(curr.getChildren()[2]);
+	}
+	return ;
 }
