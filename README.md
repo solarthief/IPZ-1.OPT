@@ -32,7 +32,7 @@ Grammar:
 21. \<DIGIT> -> 0|1|2|3|4|5|6|7|8|9
 22. \<LETTER> -> A|B|C|D|...|Z
 
-Addiitional rules:
-23. \<DECLARATION> -> LABEL \<LABEL>\<LABEL-LIST>;
-24. \<LABEL> -> \<UNSIGNED-INTEGER>
-25. \<LABEL-LIST> -> , \<LABEL>\<LABEL-LIST>|\<EMPTY>
+Additional rules:
+23. \<DECLARATION> -> LABEL \<LABEL>\<LABEL-LIST>;\
+24. \<LABEL> -> \<UNSIGNED-INTEGER>\
+25. \<LABEL-LIST> -> , \<LABEL>\<LABEL-LIST>|\<EMPTY>\
