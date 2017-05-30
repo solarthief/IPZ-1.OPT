@@ -33,6 +33,7 @@ Grammar:
 22. \<LETTER> -> A|B|C|D|...|Z
 
 Additional rules:
+
 23. \<DECLARATION> -> LABEL \<LABEL>\<LABEL-LIST>;\
 24. \<LABEL> -> \<UNSIGNED-INTEGER>\
-25. \<LABEL-LIST> -> , \<LABEL>\<LABEL-LIST>|\<EMPTY>\
+25. \<LABEL-LIST> -> , \<LABEL>\<LABEL-LIST>|\<EMPTY>
